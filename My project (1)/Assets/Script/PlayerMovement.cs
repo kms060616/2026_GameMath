@@ -11,12 +11,14 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 MouseScreenPosition;
     Vector3 targetPosition;
+
+    private bool isSprinting = false;
     public void OnPoint(InputValue value)
     {
         MouseScreenPosition = value.Get<Vector2>();
     }
 
-    public void OnClik(InputValue value)
+    public void OnClick(InputValue value)
     {
         if (value.isPressed)
         {
@@ -36,21 +38,42 @@ public class PlayerMovement : MonoBehaviour
         }
         
     }
+    
+    public void OnSprint(InputValue value)
+    {
+        isSprinting = value.isPressed;
+    }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (isMoving)
+        if (!isMoving) return;
+
+        
+        Vector3 direction = targetPosition - transform.position;
+
+       
+        float sqrDistance = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z;
+
+        if (sqrDistance > 0.001f)
         {
-            Vector3 direction = new Vector3(targetPosition.x, transform.position.y , targetPosition.z);
-            transform.Translate(direction * moveSpeed * Time.deltaTime);
+            float distance = Mathf.Sqrt(sqrDistance);
+            Vector3 normalizedDirection = direction / distance;
 
+            float currentSpeed = isSprinting ? moveSpeed * 2f : moveSpeed;
 
-            if (transform.position == targetPosition)
+            transform.position += normalizedDirection * currentSpeed * Time.deltaTime;
+
+            if (normalizedDirection != Vector3.zero)
             {
-                isMoving = false;
+                transform.forward = normalizedDirection;
             }
+        }
+        else
+        {
+            transform.position = targetPosition;
+            isMoving = false;
         }
     }
 }
