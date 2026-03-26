@@ -277,6 +277,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   rotationSpeed: 100
   moveSpeed: 5
+  isLeftParring: 0
+  isRightParring: 0
 --- !u!1 &791147488
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,7 +557,8 @@ GameObject:
   - component: {fileID: 1717078277}
   - component: {fileID: 1717078276}
   - component: {fileID: 1717078275}
-  - component: {fileID: 1717078274}
+  - component: {fileID: 1717078279}
+  - component: {fileID: 1717078280}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -563,20 +566,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1717078274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1717078273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0bace788682ef0488766cd85a794715, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::White
-  player: {fileID: 405960065}
-  viewAngle: 60
 --- !u!135 &1717078275
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -670,6 +659,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1717078279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717078273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da1becd585a17244bb83a33ee0e78fa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyController
+  player: {fileID: 405960065}
+  playerScript: {fileID: 405960066}
+  viewAngle: 60
+  maxDistance: 10
+  stopDistance: 1.2
+  dashSpeed: 15
+--- !u!114 &1717078280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717078273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d9eef12f3394ca479bf95cee89d6a38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Fov
+  rayLength: 2
+  GizmoColor: {r: 0, g: 0, b: 1, a: 1}
 --- !u!1 &2132694467
 GameObject:
   m_ObjectHideFlags: 0
