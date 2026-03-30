@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour
     public float maxDistance = 10f;
     public float stopDistance = 1.2f;
     public float dashSpeed = 15f;
+    public float rotationSpeed = 45f;
 
     private bool isDetected = false;
 
@@ -36,7 +37,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            transform.Rotate(0, 45 * Time.deltaTime, 0);
+            transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
         }
     }
 
