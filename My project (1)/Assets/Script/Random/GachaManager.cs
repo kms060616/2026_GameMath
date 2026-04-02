@@ -1,39 +1,33 @@
 using NUnit.Framework;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEngine;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GachaManager : MonoBehaviour
 {
-    public Sprite C;
-    public Sprite B;
-    public Sprite A;
-    public Sprite S;
+    public TextMeshProUGUI resultText;
 
-    public Sprite[] sprites = new Sprite[10]; 
+    
     public void SimulateGachaSingle()
     {
+        string result = Simulate();
+        resultText.text = "가챠 결과: " + result;
         Debug.Log("Gacha Result: " + Simulate());
     }
 
     public void SimulateGachaTenTime()
     {
         List<string> results = new List<string>();
-        for (int i = 0; i < 9; i++)
+
+        for (int i = 0; i < 10; i++)
         {
             results.Add(Simulate());
-            float r2 = Random.value;
-            string result2 = string.Empty;
-            if (r2 < 2f / 3f) result2 = "A";
-            else result2 = "S";
-            results.Add(result2);
-
-            Debug.Log("Gacha Results: " + string.Join(", ", results));
         }
 
-        
-
+        resultText.text = "10연차 결과:\n" + string.Join(", ", results);
+        Debug.Log("Gacha Results: " + string.Join(", ", results));
     }
     string Simulate()
     {
