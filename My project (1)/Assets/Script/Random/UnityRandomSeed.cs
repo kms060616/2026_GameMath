@@ -11,5 +11,6 @@ public class UnityRandomSeed : MonoBehaviour
             Debug.Log(Random.Range(1, 7));
         }
     }
+    
 
 }

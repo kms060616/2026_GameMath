@@ -13,33 +13,35 @@ public class DamageSimulator : MonoBehaviour
     private float totalDamage = 0, baseDamage = 20;
     private int attackCount = 0;
 
+    
+    private int weakPointCount = 0;
+    private int missCount = 0;
+    private int totalCritCount = 0;
+    private float maxDamage = 0;
+
     private string weaponName;
     private float stdDevMult, critRate, critMult;
-    
+
     private void ResetData()
     {
         totalDamage = 0;
         attackCount = 0;
         level = 1;
         baseDamage = 20f;
+        weakPointCount = 0;
+        missCount = 0;
+        totalCritCount = 0;
+        maxDamage = 0;
     }
+
     public void SetWeapon(int id)
     {
         ResetData();
-        if (id == 0)
-        {
-            SetStats("단검", 0.1f, 0.4f, 1.5f);
-        }
-        else if (id == 1)
-        {
-            SetStats("장검", 0.2f, 0.3f, 2.0f);
-        }
-        else if (id == 2)
-        {
-            SetStats("도끼", 0.3f, 0.2f, 3.0f);
-        }
+        if (id == 0) SetStats("단검", 0.1f, 0.4f, 1.5f);
+        else if (id == 1) SetStats("장검", 0.2f, 0.3f, 2.0f);
+        else if (id == 2) SetStats("도끼", 0.3f, 0.2f, 3.0f);
 
-        logDisplay.text = string.Format("{0} 장착!", weaponName);
+        logDisplay.text = $"{weaponName} 장착!";
         UpdateUI();
     }
 
@@ -55,53 +57,102 @@ public class DamageSimulator : MonoBehaviour
     {
         totalDamage = 0;
         attackCount = 0;
+        weakPointCount = 0;
+        missCount = 0;
+        totalCritCount = 0;
+        maxDamage = 0;
         level++;
         baseDamage = level * 20f;
-        logDisplay.text = string.Format("레벨업! 현재 레벨: {0}", level);
+        logDisplay.text = $"레벨업! 현재 레벨: {level}";
         UpdateUI();
     }
 
     public void OnAttack()
     {
+        ExecuteAttack();
+        UpdateUI();
+    }
+
+    public void OnAttackX1000()
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            ExecuteAttack();
+        }
+        logDisplay.text = "<color=yellow>1,000회 연속 공격 완료!</color>";
+        UpdateUI();
+    }
+
+    private void ExecuteAttack()
+    {
+        float u1 = 1.0f - Random.value;
+        float u2 = 1.0f - Random.value;
+        float z = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Cos(2.0f * Mathf.PI * u2);
 
         float sd = baseDamage * stdDevMult;
-        float normalDamage = GetNormalStdDevDamage(baseDamage, sd);
+        float normalDamage = baseDamage + (sd * z); 
 
-        bool isCrit = Random.value < critRate;
-        float finalDamage = isCrit ? normalDamage * critMult : normalDamage;
-        if (baseDamage < normalDamage - 2 * sd)
+        float finalDamage = normalDamage;
+        bool isMiss = false;
+        bool isWeakPoint = false;
+        bool isCrit = false;
+
+
+        if (z < -2.0f)
         {
+            isMiss = true;
             finalDamage = 0;
-            totalDamage += finalDamage;
-            logDisplay.text = string.Format("Miss");
-            
+            missCount++;
+        }
+        else if (z > 2.0f) 
+        {
+            isWeakPoint = true;
+            finalDamage *= 2.0f;
+            weakPointCount++;
+        }
+
+        if (!isMiss && Random.value < critRate)
+        {
+            isCrit = true;
+            finalDamage *= critMult;
+            totalCritCount++;
         }
 
         attackCount++;
         totalDamage += finalDamage;
+        if (finalDamage > maxDamage) maxDamage = finalDamage;
 
-        string criMark = isCrit ? "<color=red>[치명타!]</color>" : "";
-        logDisplay.text = string.Format("{0}데미지: {1:F1}", criMark, finalDamage);
-        
-        UpdateUI();
+
+        if (attackCount % 1000 != 0)
+        {
+            string msg = isMiss ? "<color=gray>Miss</color>" : $"{finalDamage:F1}";
+            if (isWeakPoint) msg = $"<color=blue>[약점]</color> " + msg;
+            if (isCrit) msg = $"<color=red>[치명타]</color> " + msg;
+            logDisplay.text = $"데미지: {msg}";
+        }
     }
-
 
     private void UpdateUI()
     {
-        statusDisplay.text = string.Format("Level: {0} / 무기: {1}\n기본데미지: {2} / 치명타: {3}% (x{4});", level, weaponName, baseDamage, critRate *100, critMult);
+        statusDisplay.text = $"Level: {level} / 무기: {weaponName}\n기본: {baseDamage} / 치명타: {critRate * 100}% (x{critMult})";
 
-        rangeDisplay.text = string.Format("예상 일반 데미지 범위 : [{0:F1} ~ {1:F1}]", baseDamage - (3 * baseDamage * stdDevMult), baseDamage + (3 * baseDamage * stdDevMult));
+        rangeDisplay.text = $"일반 범위: [{baseDamage - (3 * baseDamage * stdDevMult):F1} ~ {baseDamage + (3 * baseDamage * stdDevMult):F1}]\n" +
+                           $"약점/미스 기준: ±{2 * baseDamage * stdDevMult:F1}";
 
         float dpa = attackCount > 0 ? totalDamage / attackCount : 0;
-        resultDisplay.text = string.Format("누적 데미지: {0:F1}\n공격 횟수: {1}\n평균 DPA: {2:F2}", totalDamage, attackCount, dpa);
+        resultDisplay.text = $"<b>[누적 통계]</b>\n" +
+                             $"공격 횟수: {attackCount}회\n" +
+                             $"평균 DPA: {dpa:F2} / 최대 데미지: {maxDamage:F1}\n" +
+                             $"<color=blue>약점 공격: {weakPointCount}회</color> / 명중 실패: {missCount}회</color>\n" +
+                             $"총 크리티컬: {totalCritCount}회";
     }
 
     private float GetNormalStdDevDamage(float mean, float stdDev)
     {
         float u1 = 1.0f - Random.value;
         float u2 = 1.0f - Random.value;
-        float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2);
-        return mean + stdDev + randStdNormal;
+        float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Cos(2.0f * Mathf.PI * u2);
+
+        return mean + (stdDev * randStdNormal);
     }
 }
