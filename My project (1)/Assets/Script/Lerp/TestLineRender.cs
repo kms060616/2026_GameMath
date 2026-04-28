@@ -7,57 +7,64 @@ using UnityEngine.Rendering;
 [RequireComponent(typeof(LineRenderer))]
 public class TestLineRender : MonoBehaviour
 {
-    public Transform startPos;
-
-    public Transform endPos;
-
-
-
+    public Transform startPos; 
+    [Header("Settings")]
     [Range(1f, 5f)] public float extend = 1.5f;
+    public float rotationSpeed = 5f; 
 
     private LineRenderer lr;
+    private Transform targetEnemy; 
 
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
         lr.positionCount = 2;
         lr.widthMultiplier = 0.05f;
-        lr.material = new Material(Shader.Find("Unlit/Color"))
-        {
-            color = Color.red
-        };
+        lr.material = new Material(Shader.Find("Unlit/Color")) { color = Color.red };
 
+        lr.enabled = false;
     }
 
     public void OnRightClick(InputValue value)
     {
         if (!value.isPressed) return;
+
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             if (hit.collider.CompareTag("Enemy"))
             {
-                Debug.Log("클릭됌");
-                
-                 
-                
+                Debug.Log("적 타겟팅 완료: " + hit.collider.name);
+                targetEnemy = hit.transform; 
+                lr.enabled = true; 
             }
         }
         else
         {
-            Debug.Log("클릭안됌");
+            Debug.Log("타겟 해제");
+            targetEnemy = null;
+            lr.enabled = false;
         }
     }
 
     void Update()
     {
-        if (!startPos || !endPos) return;
+        if (targetEnemy == null || !startPos) return;
+
+        Vector3 direction = targetEnemy.position - transform.position;
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+
         Vector3 a = startPos.position;
-        Vector3 b = endPos.position;
-        Vector3 pred = Vector3.LerpUnclamped(a, b, extend);
+        Vector3 b = targetEnemy.position;
+
+        Vector3 extendedPoint = Vector3.LerpUnclamped(a, b, extend);
+
         lr.SetPosition(0, a);
-        lr.SetPosition(1, pred);
-        
+        lr.SetPosition(1, extendedPoint);
     }
 }
