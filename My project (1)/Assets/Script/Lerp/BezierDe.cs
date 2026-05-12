@@ -18,17 +18,33 @@ public class BezierDe : MonoBehaviour
 
     List<Vector3> points;
     float time = 0f;
+    bool isInitialized = false;
 
-    void Awake()
+    public void Init(Transform start, Transform target)
     {
+        p0 = start;
+        p3 = target;
+
         GenerateRandomControlPoints();
         points = new List<Vector3> { p0.position, p1, p2, p3.position };
+
+        isInitialized = true;
     }
 
-    void Update()
+        void Update()
     {
+        if (!isInitialized) return;
+
         time += Time.deltaTime / 2f;
-        transform.position = DeCasteljau(points, time);
+
+        if (time <= 1.0f)
+        {
+            transform.position = DeCasteljau(new List<Vector3>(points), time);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void GenerateRandomControlPoints()

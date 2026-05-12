@@ -186,6 +186,7 @@ MonoBehaviour:
   targetPosition: {fileID: 584991091}
   startPosition: {fileID: 473583854}
   prefabs: {fileID: 6818794765921286527, guid: 68de1554e614dab47bfa44f41e6a54a9, type: 3}
+  enemyTag: Enemy
 --- !u!65 &473583851
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -293,7 +294,7 @@ GameObject:
   - component: {fileID: 584991088}
   m_Layer: 0
   m_Name: Cube (6)
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
