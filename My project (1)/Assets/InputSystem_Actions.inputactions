@@ -37,7 +37,7 @@
                     "name": "Interact",
                     "type": "Button",
                     "id": "852140f2-7766-474d-8707-702459ba45f3",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "Hold",
                     "initialStateCheck": false
@@ -118,6 +118,24 @@
                     "name": "RightClick",
                     "type": "Value",
                     "id": "9020199e-9171-4438-a7e9-1f40340a7db3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "New action1",
+                    "type": "Button",
+                    "id": "58c24b03-629f-467a-b99b-9fb672978013",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BezierAttack",
+                    "type": "Value",
+                    "id": "15e43eab-4b45-4ad6-9674-98d17d921c54",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -551,6 +569,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "RightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "71b55011-1f64-492f-bbaf-122491dde345",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0d2fd198-2955-45fa-bc7a-720a9ba64573",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BezierAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
