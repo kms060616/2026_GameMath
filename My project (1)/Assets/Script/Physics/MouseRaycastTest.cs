@@ -19,30 +19,34 @@ public class MouseRaycastTest : MonoBehaviour
 
     public void OnClick(InputValue value)
     {
-        if (!value.isPressed)
+        if (!value.isPressed || BollGameManager.Instance.isGameOver || BollGameManager.Instance.isBallMoving)
             return;
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
 
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
         {
-            Rigidbody rb = hit.collider.attachedRigidbody;
+            Rigidbody targetRb = hit.collider.attachedRigidbody;
 
-
-            if (rb != null)
+            if (targetRb != null)
             {
+                string targetTag = targetRb.gameObject.tag;
+                int currentTurn = BollGameManager.Instance.currentTurn;
+
+                if ((currentTurn == 1 && targetTag != "Player1") || (currentTurn == 2 && targetTag != "Player2"))
+                {
+                    Debug.Log("자신의 공만 칠 수 있습니다!");
+                    return;
+                }
+
                 Vector3 hitPoint = hit.point;
-                Vector3 center = rb.gameObject.transform.position;
+                Vector3 center = targetRb.gameObject.transform.position;
                 Vector3 forceDirection = center - hitPoint;
                 forceDirection.y = 0f;
                 forceDirection.Normalize();
-
-
-                rb = GetComponent<Rigidbody>();
-                rb.AddForce(forceDirection * forcePower, ForceMode.Impulse);
-
-                
+                targetRb.AddForce(forceDirection * forcePower, ForceMode.Impulse);
+                BollGameManager.Instance.StartTurnAction();
             }
         }
     }

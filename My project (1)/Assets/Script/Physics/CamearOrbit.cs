@@ -12,10 +12,16 @@ public class CamearOrbit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (target == null) return;
         yaw += moveInput * rotateSpeed * Time.deltaTime;
         Quaternion rotation = Quaternion.Euler(0f, yaw, 0f);
         Vector3 rotatedOffset = rotation * offset;
         transform.position = target.position + rotatedOffset;
         transform.LookAt(target);
+    }
+
+    public void ChangeTarget(Transform newTarget)
+    {
+        target = newTarget;
     }
 }
