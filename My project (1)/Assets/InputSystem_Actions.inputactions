@@ -140,6 +140,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Create Bomb",
+                    "type": "Value",
+                    "id": "11a73cdc-45b8-4913-9849-713647a50dcd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -591,6 +600,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "BezierAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58306b6f-3916-44d5-b98a-d405ef994786",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Create Bomb",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
