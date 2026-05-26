@@ -149,6 +149,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Create Bomb2",
+                    "type": "Value",
+                    "id": "038b7e0e-110a-45ea-a3b3-91486171f194",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -611,6 +620,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Create Bomb",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f22c2175-4756-4009-9867-85da29c864cb",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Create Bomb2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

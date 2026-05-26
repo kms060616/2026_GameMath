@@ -3,8 +3,8 @@ using UnityEngine;
 public class Explode : MonoBehaviour
 {
     public float delay = 1.5f;
-    public float force = 1f;
-    public float radius = 2f;
+    public float force = 10f;
+    public float radius = 5f;
     public float upwardsModifier = 1f;
 
 
